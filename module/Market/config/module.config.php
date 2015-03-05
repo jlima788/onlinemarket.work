@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'controllers' => array(
         'invokables' => array(
@@ -11,38 +12,66 @@ return array(
     ),
     'router' => array(
         'routes' => array(
-            'market' => array(
-                'type'    => 'Literal',
+            'home' => array(
+                'type' => 'Literal',
                 'options' => array(
-                    // Change this to something specific to your module
-                    'route'    => '/market',
+                    'route' => '/',
                     'defaults' => array(
-                        // Change this value to reflect the namespace in which
-                        // the controllers for your module are found
-                        //'__NAMESPACE__' => 'Market\Controller',
-                        'controller'    => 'market-index-controller',
-                        'action'        => 'index',
-                    ),
+                        'controller' => 'market-index-controller',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'market' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/market',
+                    'defaults' => array(
+                        'controller' => 'market-index-controller',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'market-view' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/market/view',
+                    'defaults' => array(
+                        'controller' => 'market-view-controller',
+                        'action' => 'index'
+                    )
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    // This route is a sane default when developing a module;
-                    // as you solidify the routes for your module, however,
-                    // you may want to remove it and replace it with more
-                    // specific routes.
-                    'default' => array(
-                        'type'    => 'Segment',
+                    'index' => array(
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
+                            'route' => '/main[/:category]',
                             'defaults' => array(
-                            ),
-                        ),
+                                'action' => 'index'
+                            )
+                        )
                     ),
-                ),
+                    'item' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/item[/:itemId]',
+                            'defaults' => array(
+                                'action' => 'item'
+                            )
+                        )
+                    )
+                )
+            ),
+            'market-post' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => 'market/post',
+                    'defaults' => array(
+                        'controller' => 'market-post-controller',
+                        'action' => 'index'
+                    )
+                )
             ),
         ),
     ),
