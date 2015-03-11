@@ -13,7 +13,8 @@ class PostController extends AbstractActionController {
         $this->categories = $categories;
     }
 
-    public function indexAction() {
+    public function indexAction() 
+    {
         return new ViewModel(array('categories' => $this->categories));
     }
 

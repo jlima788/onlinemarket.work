@@ -30,48 +30,51 @@ return array(
                         'controller' => 'market-index-controller',
                         'action' => 'index'
                     )
-                )
-            ),
-            'market-view' => array(
-                'type' => 'Literal',
-                'options' => array(
-                    'route' => '/market/view',
-                    'defaults' => array(
-                        'controller' => 'market-view-controller',
-                        'action' => 'index'
-                    )
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'index' => array(
-                        'type' => 'Segment',
+                    'view' => array(
+                        'type' => 'Literal',
                         'options' => array(
-                            'route' => '/main[/:category]',
+                            'route' => '/view',
                             'defaults' => array(
+                                'controller' => 'market-view-controller',
                                 'action' => 'index'
                             )
-                        )
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'main' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/main[/:category]',
+                                    'defaults' => array(
+                                        'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'item' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/item[/:itemId]',
+                                    'defaults' => array(
+                                        'action' => 'item'
+                                    )
+                                )
+                            ),
+                        ),
                     ),
-                    'item' => array(
-                        'type' => 'Segment',
+                    'post' => array(
+                        'type' => 'Literal',
                         'options' => array(
-                            'route' => '/item[/:itemId]',
+                            'route' => '/post',
                             'defaults' => array(
-                                'action' => 'item'
-                            )
-                        )
-                    )
-                )
-            ),
-            'market-post' => array(
-                'type' => 'Literal',
-                'options' => array(
-                    'route' => 'market/post',
-                    'defaults' => array(
-                        'controller' => 'market-post-controller',
-                        'action' => 'index'
-                    )
-                )
+                                'controller' => 'market-post-controller',
+                                'action' => 'index'
+                            ),
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
