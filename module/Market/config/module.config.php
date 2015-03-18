@@ -3,11 +3,13 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'market-index-controller' => 'Market\Controller\IndexController',
-            'market-view-controller' => 'Market\Controller\ViewController'
+            'market-city-controller' => 'Market\Controller\CityCodesController',
         ),
         'factories' => array(
-            'market-post-controller' => 'Market\Factory\PostControllerFactory'
+            'market-index-controller' => 'Market\Factory\IndexControllerFactory',
+            'market-view-controller' => 'Market\Factory\ViewControllerFactory',
+            'market-post-controller' => 'Market\Factory\PostControllerFactory',
+            'market-delete-controller' => 'Market\Factory\DeleteControllerFactory',
         )
     ),
     'router' => array(
@@ -22,10 +24,20 @@ return array(
                     )
                 )
             ),
-            'market' => array(
+            'city-lookup' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route' => '/market',
+                    'route' => '/city-lookup',
+                    'defaults' => array(
+                        'controller' => 'market-city-controller',
+                        'action' => 'lookup',
+                    ),
+                ),
+            ),
+            'market' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/market[/]',
                     'defaults' => array(
                         'controller' => 'market-index-controller',
                         'action' => 'index'
@@ -34,9 +46,9 @@ return array(
                 'may_terminate' => true,
                 'child_routes' => array(
                     'view' => array(
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route' => '/view',
+                            'route' => 'view[/]',
                             'defaults' => array(
                                 'controller' => 'market-view-controller',
                                 'action' => 'index'
@@ -47,7 +59,7 @@ return array(
                             'main' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/main[/:category]',
+                                    'route' => 'main[/:category]',
                                     'defaults' => array(
                                         'action' => 'index'
                                     )
@@ -56,7 +68,7 @@ return array(
                             'item' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/item[/:itemId]',
+                                    'route' => 'item[/:itemId]',
                                     'defaults' => array(
                                         'action' => 'item'
                                     )
@@ -65,9 +77,9 @@ return array(
                         ),
                     ),
                     'post' => array(
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route' => '/post',
+                            'route' => 'post[/]',
                             'defaults' => array(
                                 'controller' => 'market-post-controller',
                                 'action' => 'index'
@@ -79,9 +91,16 @@ return array(
         ),
     ),
     'service_manager' => array(
+        'invokables' => array(
+            'market-delete-form' => 'Market\Form\DeleteForm',
+            'market-delete-filter' => 'Market\Form\DeleteFormFilter',
+        ),
         'factories' => array(
-            'market-post-form'   => 'Market\Factory\PostFormFactory',
-            'market-post-filter' => 'Market\Factory\PostFilterFactory'
+            'general-adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
+            'market-post-form' => 'Market\Factory\PostFormFactory',
+            'market-post-filter' => 'Market\Factory\PostFilterFactory',
+            'listings-table' => 'Market\Factory\ListingsTableFactory',
+            'city-codes-table' => 'Market\Factory\CityCodesTableFactory',
         )
     ),
     'view_manager' => array(
